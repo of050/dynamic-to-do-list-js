@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load tasks from Local Storage
     function loadTasks() {
         const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-        storedTasks.forEach(taskText => createTask(taskText, false)); // `false` skips resaving to avoid duplicating during loading.
+        storedTasks.forEach(taskText => addTask(taskText, false)); // `false` skips resaving to avoid duplicating during loading.
     }
 
     // Function to save tasks to Local Storage
@@ -22,16 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('tasks') || '[]');
     }
 
-    // Function to create a new task
-    function createTask(taskText, save = true) {
-        if (!taskText.trim()) {
+    // Function to add a new task
+    function addTask(taskText, save = true) {
+        const trimmedText = taskText.trim();
+        if (!trimmedText) {
             alert('Please enter a task.');
             return;
         }
 
         // Create list item for the task
         const li = document.createElement('li');
-        li.textContent = taskText;
+        li.textContent = trimmedText;
 
         // Create remove button
         const removeBtn = document.createElement('button');
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.remove();
 
             // Remove task from Local Storage
-            const tasks = getStoredTasks().filter(t => t !== taskText);
+            const tasks = getStoredTasks().filter(t => t !== trimmedText);
             saveTasks(tasks);
         };
 
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Save task in Local Storage if needed
         if (save) {
             const tasks = getStoredTasks();
-            tasks.push(taskText);
+            tasks.push(trimmedText);
             saveTasks(tasks);
         }
 
@@ -63,12 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add Event Listeners
 
     // Add task when clicking the button
-    addButton.addEventListener('click', () => createTask(taskInput.value));
+    addButton.addEventListener('click', () => addTask(taskInput.value));
 
     // Add task when pressing Enter
     taskInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            createTask(taskInput.value);
+            addTask(taskInput.value);
         }
     });
 
