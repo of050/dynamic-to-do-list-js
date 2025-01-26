@@ -1,50 +1,51 @@
 // Wait for the DOM to fully load before executing the script
 document.addEventListener('DOMContentLoaded', () => {
     // Select DOM elements
-    const addButton = document.getElementById('add-task-btn');
-    const taskInput = document.getElementById('task-input');
-    const taskList = document.getElementById('task-list');
+    const taskInput = document.querySelector("#new-task");
+const addButton = document.querySelector("#add-task");
+const taskList = document.querySelector("#task-list");
 
- // Function to add a new task
- function addTask() {
-    // Get the task text from the input field
-    const taskText = taskInput.value.trim();
+// Function to add a new task to the list
+function addTask() {
+  const taskText = taskInput.value.trim();
 
-    // Check if the input is not empty
-    if (taskText === "") {
-        alert("Please enter a task.");
-        return;
-    }
+  if (taskText !== "") {
+    // Create a new list item (li) element
+    const newTask = document.createElement("li");
 
-    // Create a new list item
-    const li = document.createElement('li');
-    li.textContent = taskText;
+    // Set the text content of the list item
+    newTask.textContent = taskText;
 
-    // Create a remove button
-    const removeButton = document.createElement('button');
+    // Create a new button element for removing the task
+    const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
-    removeButton.className = 'remove-btn';
+    removeButton.classList.add("remove-btn");
 
-    // Add event listener to the remove button
-    removeButton.onclick = function() {
-        taskList.removeChild(li);
-    };
+    // Add an event listener to the remove button
+    removeButton.addEventListener("click", () => {
+      // Remove the list item from the list
+      taskList.removeChild(newTask);
+    });
 
     // Append the remove button to the list item
-    li.appendChild(removeButton);
+    newTask.appendChild(removeButton);
+
     // Append the list item to the task list
-    taskList.appendChild(li);
-    // Clear the input field
-    taskInput.value = '';
+    taskList.appendChild(newTask);
+
+    // Clear the task input field
+    taskInput.value = "";
+  }
 }
 
-// Attach event listeners
-addButton.addEventListener('click', addTask);
-taskinput.addEventListener('keypress', function(event) {
-    // Check if "Enter" key is pressed
-    if (event.key === 'Enter') {
-      // Add the task
-      addTask();
-    }
-  });
+// Add an event listener to the "Add Task" button
+addButton.addEventListener("click", addTask);
+
+// Add an event listener to the task input field
+taskInput.addEventListener("keypress", (event) => {
+  // Check if the Enter key is pressed
+  if (event.key === "Enter") {
+    // Call the addTask function to add the task
+    addTask();
+  }
 });
